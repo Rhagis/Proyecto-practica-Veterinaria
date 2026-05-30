@@ -1,0 +1,25 @@
+{
+    "usuarios": [
+        {
+            "id": 1,
+            "nombre": "admin",
+            "username": "admin",
+            "contraseña": "admin123",
+            "rol": "admin"
+        },
+        {
+            "id": 2,
+            "nombre": "veterinario1",
+            "username": "vet1",
+            "contraseña": "vet123",
+            "rol": "veterinario"
+        },
+        {
+            "id": 3,
+            "nombre": "cliente1",
+            "username": "client1",
+            "contraseña": "client123",
+            "rol": "cliente"
+        }
+    ]
+}

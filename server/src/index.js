@@ -1,15 +1,16 @@
 import express from 'express';
 // import routes from './routes/user.routes.js'; // Tu compañero deberá usar el .js al final
 import db from './config/db.js'; // <-- ¡Acá el .js al final es obligatorio!
-import routes from './routes/user.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 const app = express();
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.use(routes);
+app.use('/users', userRoutes);
 
 
 

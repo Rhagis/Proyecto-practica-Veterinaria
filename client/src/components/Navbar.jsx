@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import logo from '../assets/Logo Veterinaria.png'
+import axios from 'axios'
 
 const navItems = [
   { label: 'Productos', path: '/productos' },
@@ -10,9 +11,25 @@ const navItems = [
   { label: 'Historias Clínicas', path: '/historias-clinicas' },
 ]
 
+
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [usuario, setUsuario] = useState(null);
   const currentUser = { name: 'Dr. X', avatar: '👨‍⚕️' }
+  const navigate = useNavigate();
+
+
+  
+  const cerrarSesion = () => {
+
+    axios.post('http://localhost:3000/users/logout',{},{withCredentials: true})
+      .then(
+        () => {
+          navigate('/login');
+        }
+      )
+  }
 
   return (
     <header className="navbar">
@@ -54,6 +71,9 @@ export default function Navbar() {
         <span className="user-avatar">{currentUser.avatar}</span>
         <span className="user-name">{currentUser.name}</span>
       </div>
+      <button className="logout-button" onClick={cerrarSesion}>
+        Cerrar Sesión
+      </button>
     </header>
   )
 }

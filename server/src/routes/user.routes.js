@@ -6,5 +6,9 @@ const router = express.Router()
 
 router.post('/login', userController.userLogin)
 
+router.post('/logout', userController.cerrarSesion)
+
+router.get('/comprobar', userController.comprobarUsuario)
+
 
 export default router

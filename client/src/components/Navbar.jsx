@@ -50,6 +50,10 @@ export default function Navbar() {
       )
   }
 
+  if (!usuario) {
+    return null; // No renderizar nada si no hay usuario
+  }
+
   return (
     <header className="navbar">
       <div className="navbar-brand">

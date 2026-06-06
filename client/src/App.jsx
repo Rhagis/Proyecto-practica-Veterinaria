@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import './App.css'
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/home.jsx'
@@ -12,6 +13,8 @@ import { VerificacionToken } from './pages/auth/Login.jsx'
 
 
 function App() {
+
+
   return (
     <BrowserRouter>
       <div className="app-shell">
@@ -20,7 +23,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route element={<VerificacionToken />}>
-              
+
               <Route path="/" element={<Home />} />
               <Route path="/productos" element={<Productos />} />
               <Route path="/ventas" element={<Ventas />} />

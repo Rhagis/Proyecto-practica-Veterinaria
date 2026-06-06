@@ -3,14 +3,14 @@ import userModel from '../models/user.models.js'
 const userLogin = async (req, res) => {
     try {
         
-        const { username, password } = req.body;
-        if (!username || !password) {
+        const { usuario, password } = req.body;
+        if (!usuario || !password) {
             return res.status(400).json({
                 message: 'Username and password are required'
             });
         }
         const users = await userModel();
-        const user = users.find(u => u.usuario === username && u.password === password);
+        const user = users.find(u => u.usuario === usuario && u.password === password);
         if (user) {
             res.status(200).json({ message: 'Login successful'});
         } else {

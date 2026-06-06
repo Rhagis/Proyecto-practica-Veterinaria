@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './Login.css'
+import axios from "axios";
 
 
 function Login() {
@@ -22,6 +23,18 @@ function Login() {
       return
     }
   }
+
+  const enviarDatos = async () => {
+   
+    axios.post('http://localhost:3000/users/login', { username: usuario, password })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error("Error al iniciar sesión:", error);
+      });
+  };
+
   return(
     <div className="page">
      <div className="card">
@@ -46,7 +59,7 @@ function Login() {
 
         {error && <p className="error">{error}</p>}
 
-        <button className="btn" type="submit" disabled={loading}>{loading ? "Ingresando..." : "Ingresar"}</button>
+        <button className="btn" type="submit" disabled={loading} onClick={enviarDatos}>{loading ? "Ingresando..." : "Ingresar"}</button>
       </form>
         <p className="forgot">
           <a href="#">¿Olvidaste tu contraseña?</a>

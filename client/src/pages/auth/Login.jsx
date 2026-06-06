@@ -1,7 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './Login.css'
 import axios from "axios";
+import { useNavigate, Outlet } from "react-router-dom";
 
+
+export const VerificacionToken = () => {
+
+  const navigate = useNavigate();
+  useEffect(() => {
+  axios.get('http://localhost:3000/users/comprobar',{withCredentials: true})
+    .then(response => {
+      if (!response.data.valid) {
+        navigate('/login');
+      }
+    })
+    .catch(error => {
+      console.error("Error al comprobar el token:", error);
+      navigate('/login');
+    });
+  
+}, [navigate])
+return <Outlet />
+};
 
 function Login() {
   const [usuario, setUsuario] = useState("");
@@ -9,6 +29,8 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSumbmit = (e) => {
     e.preventDefault() 
@@ -26,9 +48,11 @@ function Login() {
 
   const enviarDatos = async () => {
    
-    axios.post('http://localhost:3000/users/login', { usuario: usuario, password: password })
+    axios.post('http://localhost:3000/users/login', { usuario: usuario, password: password },{withCredentials: true})
       .then(response => {
-        console.log(response.data);
+        localStorage.setItem('token', response.data.token);
+        navigate('/');
+        window.location.reload();
       })
       .catch(error => {
         console.error("Error al iniciar sesión:", error);
@@ -70,3 +94,4 @@ function Login() {
   )
 }
 export default Login;
+

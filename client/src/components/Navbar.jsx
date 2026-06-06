@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import logo from '../assets/Logo Veterinaria.png'
+import axios from 'axios'
 
 const navItems = [
   { label: 'Productos', path: '/productos' },
@@ -10,9 +11,48 @@ const navItems = [
   { label: 'Historias Clínicas', path: '/historias-clinicas' },
 ]
 
+
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const currentUser = { name: 'Dr. X', avatar: '👨‍⚕️' }
+  const [usuario, setUsuario] = useState(null);
+  const [mostrarBotones, setMostrarBotones] = useState(false);
+  const currentUser = { name: usuario, avatar: '👨‍⚕️' }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/users/comprobar',{withCredentials: true})
+      .then(response => {
+        if (response.data.valid) {
+          setUsuario(response.data.user.usuario);
+          setMostrarBotones(true);
+        } else {
+          setUsuario(null);
+        }
+      })
+      .catch(error => {
+        console.error("Error al comprobar el token:", error);
+        setUsuario(null);
+        
+      });
+  }, []);
+  
+  
+  const cerrarSesion = () => {
+
+    axios.post('http://localhost:3000/users/logout',{},{withCredentials: true})
+      .then(
+        () => {
+          setMostrarBotones(false);
+          setUsuario(null);
+          navigate('/login');
+        }
+      )
+  }
+
+  if (!usuario) {
+    return null; // No renderizar nada si no hay usuario
+  }
 
   return (
     <header className="navbar">
@@ -49,11 +89,18 @@ export default function Navbar() {
           </NavLink>
         ))}
       </nav>
+        {mostrarBotones && (
+          <div className="user-section">
+            <span className="user-avatar">{currentUser.avatar}</span>
+            <span className="user-name">{currentUser.name}</span>
+          </div>
+        )}
+        {mostrarBotones && (
+      <button className="logout-button" onClick={cerrarSesion}>
+        Cerrar Sesión
+      </button>
+        )}
 
-      <div className="user-section">
-        <span className="user-avatar">{currentUser.avatar}</span>
-        <span className="user-name">{currentUser.name}</span>
-      </div>
     </header>
   )
 }

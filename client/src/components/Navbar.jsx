@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import logo from '../assets/Logo Veterinaria.png'
 import axios from 'axios'
@@ -16,16 +16,35 @@ const navItems = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [usuario, setUsuario] = useState(null);
-  const currentUser = { name: 'Dr. X', avatar: '👨‍⚕️' }
+  const [mostrarBotones, setMostrarBotones] = useState(false);
+  const currentUser = { name: usuario, avatar: '👨‍⚕️' }
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    axios.get('http://localhost:3000/users/comprobar',{withCredentials: true})
+      .then(response => {
+        if (response.data.valid) {
+          setUsuario(response.data.user.usuario);
+          setMostrarBotones(true);
+        } else {
+          setUsuario(null);
+        }
+      })
+      .catch(error => {
+        console.error("Error al comprobar el token:", error);
+        setUsuario(null);
+        
+      });
+  }, []);
+  
   
   const cerrarSesion = () => {
 
     axios.post('http://localhost:3000/users/logout',{},{withCredentials: true})
       .then(
         () => {
+          setMostrarBotones(false);
+          setUsuario(null);
           navigate('/login');
         }
       )
@@ -66,14 +85,18 @@ export default function Navbar() {
           </NavLink>
         ))}
       </nav>
-
-      <div className="user-section">
-        <span className="user-avatar">{currentUser.avatar}</span>
-        <span className="user-name">{currentUser.name}</span>
-      </div>
+        {mostrarBotones && (
+          <div className="user-section">
+            <span className="user-avatar">{currentUser.avatar}</span>
+            <span className="user-name">{currentUser.name}</span>
+          </div>
+        )}
+        {mostrarBotones && (
       <button className="logout-button" onClick={cerrarSesion}>
         Cerrar Sesión
       </button>
+        )}
+
     </header>
   )
 }

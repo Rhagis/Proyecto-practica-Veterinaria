@@ -26,7 +26,7 @@ function Login() {
 
   const enviarDatos = async () => {
    
-    axios.post('http://localhost:3000/users/login', { username: usuario, password })
+    axios.post('http://localhost:3000/users/login', { usuario: usuario, password: password })
       .then(response => {
         console.log(response.data);
       })

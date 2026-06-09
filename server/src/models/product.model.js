@@ -10,17 +10,19 @@ const obtenerProductoPorId = async (id) => {
     return rows
 }
 
-const añadirProductoADB = async (categoria,nombre,descripcion,costo,venta,stockActual,stockMinimo,ventaAlPublico) => {
+const añadirProductoADB = async (categoria,nombre,descripcion,codigo_barra,costo,venta,stockActual,stockMinimo,ventaAlPublico, fecha_de_vencimiento) => {
     const query = `
         INSERT INTO productos (
             id_categoria,
             nombre,
             descripcion,
+            codigo_barras,
             precio_costo,
             precio_venta,
             stock_actual,
             stock_minimo,
-            venta_al_publico
+            venta_al_publico,
+            fecha_de_vencimiento
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *
@@ -30,11 +32,13 @@ const añadirProductoADB = async (categoria,nombre,descripcion,costo,venta,stock
         categoria,
         nombre,
         descripcion,
+        codigo_barra,
         costo,
         venta,
         stockActual,
         stockMinimo,
-        ventaAlPublico
+        ventaAlPublico,
+        fecha_de_vencimiento,
     ]);
 
     return result.rows[0];
@@ -46,6 +50,10 @@ const eliminarProductoEnDB = async (id) => {
         'DELETE FROM productos WHERE id = $1 RETURNING *',
         [id]
     );
+
+}
+
+const editarProductoEnDB = async (precio_costo,precio_venta,stock_actual,fecha_de_vencimiento) =>{
 
 }
 

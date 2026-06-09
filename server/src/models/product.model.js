@@ -1,16 +1,16 @@
 import db from '../config/db.js'
 
-const obtenerProductos = () => {
-    const {rows} = db.query('SELECT * FROM productos')
+const obtenerProductos = async () => {
+    const {rows} = await db.query('SELECT * FROM productos ORDER BY id ASC')
     return rows
 }
 
-const obtenerProductoPorId = (id) => {
-    const {rows} = db.query(`SELECT * FROM productos WHERE ${id} =productos.id`)
+const obtenerProductoPorId = async (id) => {
+    const {rows} = await db.query(`SELECT * FROM productos WHERE id = ${id}`)
     return rows
 }
 
-const añadirProductoADB = (nombre,descripcion,costo,venta,stockActual,stockMinimo,ventaAlPublico) => {
+const añadirProductoADB = async (nombre,descripcion,costo,venta,stockActual,stockMinimo,ventaAlPublico) => {
     const query = `
         INSERT INTO productos (
             nombre,
@@ -40,7 +40,7 @@ const añadirProductoADB = (nombre,descripcion,costo,venta,stockActual,stockMini
 
 }
 
-const eliminarProductoEnDB = (id) => {
+const eliminarProductoEnDB = async (id) => {
         const result = await db.query(
         'DELETE FROM productos WHERE id = $1 RETURNING *',
         [id]

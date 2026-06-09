@@ -149,20 +149,6 @@ export default function FormularioProductos() {
       </select>
       <p style={{ color: "red" }}>{errores.id_categoria}</p>
 
-      <select
-        name="proveedor"
-        value={producto.proveedor}
-        onChange={handleChange}
-      >
-        <option value="">Seleccione proveedor</option>
-        {proveedores.map((prov) => (
-          <option key={prov.id} value={prov.id}>
-            {prov.nombre}
-          </option>
-        ))}
-      </select>
-      <p style={{ color: "red" }}>{errores.proveedor}</p>
-
       {/* Nombre */}
       <input
         type="text"
@@ -247,6 +233,20 @@ export default function FormularioProductos() {
         onChange={handleChange}
       />
       <p style={{ color: "red" }}>{errores.fecha_vencimiento}</p>
+
+      <select
+        name="proveedor"
+        value={producto.proveedor}
+        onChange={handleChange}
+      >
+        <option value="">Seleccione proveedor</option>
+        {proveedores.map((prov) => (
+          <option key={prov.id} value={prov.id}>
+            {prov.nombre}
+          </option>
+        ))}
+      </select>
+      <p style={{ color: "red" }}>{errores.proveedor}</p>
 
       <button type="submit">Guardar</button>
     </form>

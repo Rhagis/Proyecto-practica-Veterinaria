@@ -73,12 +73,12 @@ CREATE TABLE productos (
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     codigo_barras VARCHAR(50) UNIQUE, -- Muy útil si usan lector de barras en la tienda, aunque no es obligatorio
-    precio_costo DECIMAL(10, 2) NOT NULL DEFAULT 0.00, -- Verificar si es necesario este campo
+    precio_costo DECIMAL(10, 2) NOT NULL DEFAULT 0.00, -- Costo al que compramos el producto
     precio_venta DECIMAL(10, 2),      -- Puede ser NULL si es de uso estrictamente clínico
     stock_actual INT NOT NULL DEFAULT 0, -- Stock general del producto
     stock_minimo INT NOT NULL DEFAULT 5, -- Para alertas de "quedan pocos productos", solo se usa para comparación en el backend
     venta_al_publico BOOLEAN NOT NULL DEFAULT TRUE, -- TRUE: Tienda / FALSE: Uso del Veterinario
-    fecha_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_vencimiento DATE NULL, --Null en caso de que sea algo que no vence
     CONSTRAINT fk_categoria FOREIGN KEY (id_categoria) REFERENCES categorias(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 

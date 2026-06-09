@@ -10,23 +10,24 @@ const obtenerProductoPorId = async (id) => {
     return rows
 }
 
-const añadirProductoADB = async (nombre,descripcion,costo,venta,stockActual,stockMinimo,ventaAlPublico) => {
+const añadirProductoADB = async (categoria,nombre,descripcion,costo,venta,stockActual,stockMinimo,ventaAlPublico) => {
     const query = `
         INSERT INTO productos (
+            id_categoria,
             nombre,
             descripcion,
             precio_costo,
             precio_venta,
             stock_actual,
             stock_minimo,
-            venta_al_publico,
-            fecha_ingreso
+            venta_al_publico
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *
     `;
 
     const result = await db.query(query, [
+        categoria,
         nombre,
         descripcion,
         costo,

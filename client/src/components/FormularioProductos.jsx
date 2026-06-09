@@ -1,0 +1,254 @@
+import { useState } from "react";
+
+export default function FormularioProductos() {
+  const [producto, setProducto] = useState({
+    id_categoria: "",
+    nombre: "",
+    descripcion: "",
+    codigo_barras: "",
+    precio_compra: "",
+    precio_venta: "",
+    stock_actual: "",
+    stock_minimo: "",
+    es_publico: false,
+    fecha_vencimiento: "",
+    proveedor: "",
+  });
+
+  const [errores, setErrores] = useState({});
+
+  // simulación de categorías a traer después del backend
+  const categorias = [
+    { id: 1, nombre: "Alimentos" },
+    { id: 2, nombre: "Accesorios y Juguetes" },
+    { id: 3, nombre: "Higiene y Cuidado" },
+    { id: 4, nombre: "Medicamentos y Fármacos" },
+    { id: 5, nombre: "Vacunas" },
+    { id: 6, nombre: "Descartables e Insumos Médicos" },
+  ];
+
+  const proveedores = [
+    { id: 1, nombre: "Veterinaria Central" },
+    { id: 2, nombre: "Distribuidora Animal" },
+    { id: 3, nombre: "Dropship Pet" },
+    { id: 4, nombre: "Proveedor Salud Animal" },
+  ];
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setProducto({
+      ...producto,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const validar = () => {
+    const nuevosErrores = {};
+
+    if (!producto.id_categoria) {
+      nuevosErrores.id_categoria = "Seleccione una categoría.";
+    }
+
+    if (!producto.nombre.trim()) {
+      nuevosErrores.nombre = "El nombre es obligatorio.";
+    }
+
+    if (!producto.precio_compra || producto.precio_compra <= 0) {
+      nuevosErrores.precio_compra = "Ingrese el precio de compra válido.";
+    }
+
+    if (!producto.precio_venta || producto.precio_venta <= 0) {
+      nuevosErrores.precio_venta = "Ingrese el precio de venta válido.";
+    }
+
+    if (producto.precio_venta < producto.precio_compra) {
+      nuevosErrores.precio_venta =
+        "El precio de venta no puede ser menor al precio de compra.";
+    }
+
+    if (producto.stock_actual < 0) {
+      nuevosErrores.stock_actual = "El stock no puede ser negativo.";
+    }
+
+    if (producto.stock_minimo < 0) {
+      nuevosErrores.stock_minimo = "El stock mínimo no puede ser negativo.";
+    }
+
+    if (
+      producto.fecha_vencimiento &&
+      new Date(producto.fecha_vencimiento) < new Date()
+    ) {
+      nuevosErrores.fecha_vencimiento =
+        "La fecha de vencimiento no puede ser anterior a la fecha actual.";
+    }
+
+    if (!producto.proveedor) {
+      nuevosErrores.proveedor = "Seleccione un proveedor.";
+    }
+
+    return nuevosErrores;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const erroresValidacion = validar();
+    setErrores(erroresValidacion);
+
+    if (Object.keys(erroresValidacion).length > 0) return;
+
+    const productoFormateado = {
+      ...producto,
+      id_categoria: Number(producto.id_categoria),
+      proveedor: Number(producto.proveedor),
+      precio_compra: Number(producto.precio_compra),
+      precio_venta: Number(producto.precio_venta),
+      stock_actual: Number(producto.stock_actual),
+      stock_minimo: Number(producto.stock_minimo),
+    };
+
+    console.log("Producto listo para enviar:", productoFormateado);
+
+    alert("Producto registrado correctamente.");
+
+    // Reset del formulario
+    setProducto({
+      id_categoria: "",
+      nombre: "",
+      descripcion: "",
+      codigo_barras: "",
+      precio_compra: "",
+      precio_venta: "",
+      stock_actual: "",
+      stock_minimo: "",
+      es_publico: false,
+      fecha_vencimiento: "",
+      proveedor: "",
+    });
+
+    setErrores({});
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "auto" }}>
+      <h2>Registrar Producto</h2>
+
+      {/* Categoría */}
+      <select
+        name="id_categoria"
+        value={producto.id_categoria}
+        onChange={handleChange}
+      >
+        <option value="">Seleccione categoría</option>
+        {categorias.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.nombre}
+          </option>
+        ))}
+      </select>
+      <p style={{ color: "red" }}>{errores.id_categoria}</p>
+
+      <select
+        name="proveedor"
+        value={producto.proveedor}
+        onChange={handleChange}
+      >
+        <option value="">Seleccione proveedor</option>
+        {proveedores.map((prov) => (
+          <option key={prov.id} value={prov.id}>
+            {prov.nombre}
+          </option>
+        ))}
+      </select>
+      <p style={{ color: "red" }}>{errores.proveedor}</p>
+
+      {/* Nombre */}
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Nombre"
+        value={producto.nombre}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.nombre}</p>
+
+      {/* Descripción */}
+      <textarea
+        name="descripcion"
+        placeholder="Descripción"
+        value={producto.descripcion}
+        onChange={handleChange}
+      />
+
+      {/* Código de barras */}
+      <input
+        type="text"
+        name="codigo_barras"
+        placeholder="Código de barras"
+        value={producto.codigo_barras}
+        onChange={handleChange}
+      />
+
+      {/* Precios */}
+      <input
+        type="number"
+        name="precio_compra"
+        placeholder="Precio compra"
+        value={producto.precio_compra}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.precio_compra}</p>
+
+      <input
+        type="number"
+        name="precio_venta"
+        placeholder="Precio venta"
+        value={producto.precio_venta}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.precio_venta}</p>
+
+      {/* Stock */}
+      <input
+        type="number"
+        name="stock_actual"
+        placeholder="Stock actual"
+        value={producto.stock_actual}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.stock_actual}</p>
+
+      <input
+        type="number"
+        name="stock_minimo"
+        placeholder="Stock mínimo"
+        value={producto.stock_minimo}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.stock_minimo}</p>
+
+      {/* Checkbox */}
+      <label>
+        Venta al público:
+        <input
+          type="checkbox"
+          name="es_publico"
+          checked={producto.es_publico}
+          onChange={handleChange}
+        />
+      </label>
+
+      {/* Fecha */}
+      <input
+        type="date"
+        name="fecha_vencimiento"
+        value={producto.fecha_vencimiento}
+        onChange={handleChange}
+      />
+      <p style={{ color: "red" }}>{errores.fecha_vencimiento}</p>
+
+      <button type="submit">Guardar</button>
+    </form>
+  );
+}

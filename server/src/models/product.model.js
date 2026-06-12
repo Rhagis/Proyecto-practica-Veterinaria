@@ -22,9 +22,9 @@ const añadirProductoADB = async (categoria,nombre,descripcion,codigo_barra,cost
             stock_actual,
             stock_minimo,
             venta_al_publico,
-            fecha_de_vencimiento
+            fecha_vencimiento
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)
         RETURNING *
     `;
 

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from 'axios'
+
 
 export default function FormularioProductos() {
   const [producto, setProducto] = useState({
@@ -6,11 +8,11 @@ export default function FormularioProductos() {
     nombre: "",
     descripcion: "",
     codigo_barras: "",
-    precio_compra: "",
+    precio_costo: "",
     precio_venta: "",
     stock_actual: "",
     stock_minimo: "",
-    es_publico: false,
+    venta_al_publico: false,
     fecha_vencimiento: "",
     proveedor: "",
   });
@@ -54,15 +56,15 @@ export default function FormularioProductos() {
       nuevosErrores.nombre = "El nombre es obligatorio.";
     }
 
-    if (!producto.precio_compra || producto.precio_compra <= 0) {
-      nuevosErrores.precio_compra = "Ingrese el precio de compra válido.";
+    if (!producto.precio_costo || producto.precio_costo <= 0) {
+      nuevosErrores.precio_costo = "Ingrese el precio de compra válido.";
     }
 
     if (!producto.precio_venta || producto.precio_venta <= 0) {
       nuevosErrores.precio_venta = "Ingrese el precio de venta válido.";
     }
 
-    if (producto.precio_venta < producto.precio_compra) {
+    if (producto.precio_venta < producto.precio_costo) {
       nuevosErrores.precio_venta =
         "El precio de venta no puede ser menor al precio de compra.";
     }
@@ -90,7 +92,7 @@ export default function FormularioProductos() {
     return nuevosErrores;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const erroresValidacion = validar();
@@ -101,8 +103,8 @@ export default function FormularioProductos() {
     const productoFormateado = {
       ...producto,
       id_categoria: Number(producto.id_categoria),
-      proveedor: Number(producto.proveedor),
-      precio_compra: Number(producto.precio_compra),
+      //proveedor: Number(producto.proveedor),
+      precio_costo: Number(producto.precio_costo),
       precio_venta: Number(producto.precio_venta),
       stock_actual: Number(producto.stock_actual),
       stock_minimo: Number(producto.stock_minimo),
@@ -112,23 +114,25 @@ export default function FormularioProductos() {
 
     alert("Producto registrado correctamente.");
 
+    await axios.post('http://localhost:3000/products/product/add', productoFormateado, {withCredentials:true})
+
     // Reset del formulario
     setProducto({
       id_categoria: "",
       nombre: "",
       descripcion: "",
       codigo_barras: "",
-      precio_compra: "",
+      precio_costo: "",
       precio_venta: "",
       stock_actual: "",
       stock_minimo: "",
-      es_publico: false,
+      venta_al_publico: false,
       fecha_vencimiento: "",
-      proveedor: "",
+//      proveedor: "",
     });
 
     setErrores({});
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "auto" }}>
@@ -179,12 +183,12 @@ export default function FormularioProductos() {
       {/* Precios */}
       <input
         type="number"
-        name="precio_compra"
+        name="precio_costo"
         placeholder="Precio compra"
-        value={producto.precio_compra}
+        value={producto.precio_costo}
         onChange={handleChange}
       />
-      <p style={{ color: "red" }}>{errores.precio_compra}</p>
+      <p style={{ color: "red" }}>{errores.precio_costo}</p>
 
       <input
         type="number"
@@ -219,8 +223,8 @@ export default function FormularioProductos() {
         Venta al público:
         <input
           type="checkbox"
-          name="es_publico"
-          checked={producto.es_publico}
+          name="venta_al_publico"
+          checked={producto.venta_al_publico}
           onChange={handleChange}
         />
       </label>

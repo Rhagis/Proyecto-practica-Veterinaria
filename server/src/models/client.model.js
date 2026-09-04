@@ -18,6 +18,11 @@ const editarClienteADB = async (id, cliente) => {
     return rows[0];
 }
 
+const objeterRegistroVentaPorCliente = async (id_cliente) => {
+    const {rows} = await db.query('SELECT * FROM ventas WHERE id_cliente = $1', [id_cliente]);
+    return rows;
+}
+
 const eliminarClienteADB = async (id) => {
     const {rows} = await db.query('DELETE FROM clientes WHERE id = $1 RETURNING *', [id]);
     return rows[0];
@@ -27,5 +32,6 @@ export default {
     obtenerListaClientes,
     añadirClienteADB,
     editarClienteADB,
-    eliminarClienteADB
+    eliminarClienteADB,
+    objeterRegistroVentaPorCliente
 };

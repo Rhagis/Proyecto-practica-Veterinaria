@@ -11,7 +11,9 @@ router.post('/logout', validarUsuario, userController.cerrarSesion)
 
 router.get('/comprobar', validarUsuario, userController.comprobarUsuario)
 
-router.post('/add', validarUsuario, userController.crearUsuario)
+router.get('/ventas/:id_cliente', validarUsuario, userController.obtenerRegistroVentaPorCliente)
+
+router.post('/add', userController.crearUsuario)
 
 router.put('/editar/:id', validarUsuario, userController.editarUsuario)
 

@@ -65,9 +65,27 @@ const eliminarCliente = async (req, res) => {
     }
 }
 
+const objeterRegistroVentaPorCliente = async (req, res) => {
+    try {
+        const { id_cliente } = req.params;
+        if(!id_cliente) {
+            return res.status(400).json({ message: 'Falta el ID del cliente' });
+        }
+        const registrosVenta = await objeterRegistroVentaPorCliente(id_cliente);
+        if(!registrosVenta || registrosVenta.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron registros de venta para este cliente' });
+        }
+        res.status(200).json({ message: 'Registros de venta obtenidos correctamente', registrosVenta });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error al obtener los registros de venta', error });
+    }
+}
+
 export default {
     listaClientes,
     añadirCliente,
     editarCliente,
-    eliminarCliente
+    eliminarCliente,
+    objeterRegistroVentaPorCliente
 };

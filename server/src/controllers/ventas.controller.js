@@ -8,8 +8,10 @@ import {obtenerLotesVentas,
       obtenerDetallesVenta, 
       filtrarServiciosPorId,
       generarReporteVentas,
+      generarReporteVentasPorDia,
       generarReporteVentasPorSemana,
       generarReporteVentasPorMes} from '../models/ventas.model.js'
+import productModel from '../models/product.model.js'
 
 const descontarStock = async (req, res) => {
     const { id_producto,cantidad } = req.body;
@@ -50,7 +52,6 @@ const registrarVenta = async (req, res) => {
     const fechaVenta = new Date(); // Obtener la fecha actual
     try {
         const venta = await añadirVenta(id_usuario, id_cliente, metodoPago, fechaVenta, total);
-        console.log('Venta registrada:', venta);
         if (!venta) {
             return res.status(500).json({ message: 'Error al registrar la venta' });
         }

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import recharts from 'recharts'
 
   
 
@@ -26,12 +27,16 @@ export default function Home() {
     }
     }
     
-    
+  
   checkStock()
 
   const intervalo = setInterval(checkStock,30000)
 
   return () => clearInterval(intervalo)
+  }, [])
+
+  useEffect(() => {
+    //Logica para generar graficos con recharts para registros de ventas diarios, semanales y mensuales
   }, [])
 
   return (
